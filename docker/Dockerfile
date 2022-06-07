@@ -85,6 +85,7 @@ EXPOSE 2181 2888 3888 8080
 ENV PATH=$PATH:/$DISTRO_NAME/bin \
     ZOOCFGDIR=$ZOO_CONF_DIR
 
+COPY test.py .
 COPY zookeeper.py .
 COPY docker-entrypoint.sh .
 
