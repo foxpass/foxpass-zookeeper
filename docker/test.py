@@ -21,7 +21,7 @@ for zk in zk_stats:
         else:
             followers.append(zk)
 
-if synced_followers < 2 and (len(leader) > 1 or len(leader) < 1 or len(followers) < 2 or len(followers) > 2):
+if synced_followers < 2 or len(leader) > 1 or len(leader) < 1 or len(followers) < 2 or len(followers) > 2:
     print("alert!")
     print("stats: {}".format(zk_stats))
     print("synced_followers: {}".format(synced_followers))
