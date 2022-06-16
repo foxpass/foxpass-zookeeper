@@ -11,8 +11,7 @@ ENV ZOO_CONF_DIR=/conf \
     ZOO_AUTOPURGE_SNAPRETAINCOUNT=3 \
     ZOO_MAX_CLIENT_CNXNS=60 \
     ZOO_STANDALONE_ENABLED=true \
-    ZOO_ADMINSERVER_ENABLED=true \
-    JVMFLAGS=-Dsun.net.inetaddr.ttl=0
+    ZOO_ADMINSERVER_ENABLED=true
 
 # Add a user with an explicit UID/GID and create necessary directories
 RUN set -eux; \
@@ -85,6 +84,7 @@ EXPOSE 2181 2888 3888 8080
 ENV PATH=$PATH:/$DISTRO_NAME/bin \
     ZOOCFGDIR=$ZOO_CONF_DIR
 
+COPY check_status.py .
 COPY zookeeper.py .
 COPY docker-entrypoint.sh .
 
