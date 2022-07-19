@@ -26,7 +26,7 @@ e.g
 ZOO_HOSTED_ZONE=T24WYUCZ179
 ```
 
-The domain name convention should be configured in a way that it coincides with whatever value the subnet (third octet of the subnet cidr) has. 
+Every zookeeper instance that comes up as a cluster needs to have a predetermined ID. We use the third octet of the subnet CIDR to assign the ID value for the zookeeper instance.
 
 
 If the subnet is 10.1.101.0/24 then the Zookeeper server value should be 101.101.domain.local:2888:3888;2181 by getting the third octet value from the subnet cidr.
