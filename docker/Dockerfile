@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM eclipse-temurin:8u372-b07-jre-jammy
 
 ENV ZOO_CONF_DIR=/conf \
     ZOO_DATA_DIR=/data \
@@ -22,8 +22,8 @@ RUN set -eux; \
 
 # Install required packges
 RUN set -eux; \
-    apt-get update; \
     DEBIAN_FRONTEND=noninteractive \
+    apt-get update -y && apt-get upgrade -y; \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         dirmngr \
@@ -33,7 +33,6 @@ RUN set -eux; \
         jq \
         python3-pip \
         wget; \
-    rm -rf /var/lib/apt/lists/*; \
 # Verify that gosu binary works
     gosu nobody true
 
@@ -67,7 +66,7 @@ RUN set -eux; \
     ddist "$DISTRO_NAME.tar.gz" "zookeeper/$SHORT_DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
     ddist "$DISTRO_NAME.tar.gz.asc" "zookeeper/$SHORT_DISTRO_NAME/$DISTRO_NAME.tar.gz.asc"; \
     export GNUPGHOME="$(mktemp -d)"; \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-key "$GPG_KEY" || \
+    gpg --keyserver keyserver.ubuntu.com --recv-key "$GPG_KEY" || \
     gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" || \
     gpg --keyserver keyserver.pgp.com --recv-keys "$GPG_KEY"; \
     gpg --batch --verify "$DISTRO_NAME.tar.gz.asc" "$DISTRO_NAME.tar.gz"; \
@@ -75,6 +74,14 @@ RUN set -eux; \
     mv "$DISTRO_NAME/conf/"* "$ZOO_CONF_DIR"; \
     rm -rf "$GNUPGHOME" "$DISTRO_NAME.tar.gz" "$DISTRO_NAME.tar.gz.asc"; \
     chown -R zookeeper:zookeeper "/$DISTRO_NAME"
+
+# Cleanup
+RUN rm -rf /tmp/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /root/.cache/ && \
+    rm -rf /root/.local/ && \
+    apt-get remove -y wget dirmngr jq gnupg netcat && \
+    apt-get autoremove -y
 
 WORKDIR $DISTRO_NAME
 VOLUME ["$ZOO_DATA_DIR", "$ZOO_DATA_LOG_DIR", "$ZOO_LOG_DIR"]
