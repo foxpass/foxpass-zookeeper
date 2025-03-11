@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8u372-b07-jre-jammy
+FROM eclipse-temurin:17.0.14_7-jre-jammy
 
 ENV ZOO_CONF_DIR=/conf \
     ZOO_DATA_DIR=/data \
@@ -39,9 +39,9 @@ RUN set -eux; \
 # Install pip requirement
 RUN pip install boto3 requests
 
-ARG GPG_KEY=BBE7232D7991050B54C8EA0ADC08637CA615D22C
-ARG SHORT_DISTRO_NAME=zookeeper-3.5.6
-ARG DISTRO_NAME=apache-zookeeper-3.5.6-bin
+ARG GPG_KEY=8D8C3C3ED0B02E66
+ARG SHORT_DISTRO_NAME=zookeeper-3.8.4
+ARG DISTRO_NAME=apache-zookeeper-3.8.4-bin
 
 # Download Apache Zookeeper, verify its PGP signature, untar and clean up
 RUN set -eux; \
